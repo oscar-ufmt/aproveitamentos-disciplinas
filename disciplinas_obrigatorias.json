@@ -11,7 +11,7 @@
     },
     {
         "codigo": "114200305",
-        "nome": "Ciência, Tecnologia e Sociedade (EAD)",
+        "nome": "Ciência, Tecnologia e Sociedade",
         "carga_horaria": "32h"
     },
     {
@@ -141,7 +141,7 @@
     },
     {
         "codigo": "114200329",
-        "nome": "Matemática Financeira (EAD)",
+        "nome": "Matemática Financeira",
         "carga_horaria": "64h"
     },
     {
@@ -156,7 +156,7 @@
     },
     {
         "codigo": "114200333",
-        "nome": "Atitude Empreendedora (EAD)",
+        "nome": "Atitude Empreendedora",
         "carga_horaria": "64h"
     },
     {
@@ -190,8 +190,8 @@
         "carga_horaria": "64h"
     },    
     {
-        "codigo": "114200340",
-        "nome": "Fenômenos de Transportes",
+        "codigo": "114100009",
+        "nome": "Fenômenos de Transporte",
         "carga_horaria": "64h"
     },    
     {
