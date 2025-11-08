@@ -11,7 +11,7 @@
   },
   {
     "codigo": "114200347",
-    "nome": "Análise de Redes Sociais (EAD)",
+    "nome": "Análise de Redes Sociais",
     "carga_horaria": "64h"
   },
   {
@@ -46,7 +46,7 @@
   },
   {
     "codigo": "114200354",
-    "nome": "Criptografia e Segurança de Dados (EAD)",
+    "nome": "Criptografia e Segurança de Dados",
     "carga_horaria": "64h"
   },    
   {
@@ -71,7 +71,7 @@
   },
   {
     "codigo": "114200359",
-    "nome": "Distributed Computing Principles  (EAD)",
+    "nome": "Distributed Computing Principles",
     "carga_horaria": "64h"
   },
   {
@@ -81,12 +81,12 @@
   },
   {
     "codigo": "114300060",
-    "nome": "Fundamentos de Matemática Elementar (EAD)",
+    "nome": "Fundamentos de Matemática Elementar",
     "carga_horaria": "64h"
   },
   {
     "codigo": "114200362",
-    "nome": "Gestão de Projetos (EAD)",
+    "nome": "Gestão de Projetos",
     "carga_horaria": "64h"
   },
   {
@@ -96,7 +96,7 @@
   },  
   {
     "codigo": "114200364",
-    "nome": "Inteligência de Negócios (EAD)",
+    "nome": "Inteligência de Negócios",
     "carga_horaria": "64h"
   },  
   {
@@ -121,7 +121,7 @@
   },
   {
     "codigo": "114200369",
-    "nome": "Modelagem e Controle de Sistemas Automatizado (EAD)",
+    "nome": "Modelagem e Controle de Sistemas Automatizado",
     "carga_horaria": "64h"
   },
   {
@@ -136,7 +136,7 @@
   },
   {
     "codigo": "114200372",
-    "nome": "Plataformas e Apis (EAD)",
+    "nome": "Plataformas e Apis",
     "carga_horaria": "64h"
   },
   {
@@ -176,7 +176,7 @@
   },
   {
     "codigo": "114200380",
-    "nome": "  Tópicos Avançados em Engenharia de Computação II (EAD)",
+    "nome": "  Tópicos Avançados em Engenharia de Computação II",
     "carga_horaria": "64h"
   },
   {
@@ -191,7 +191,7 @@
   },  
   {
     "codigo": "114200383",
-    "nome": "Tópicos em Matemática da Computação II (EAD)",
+    "nome": "Tópicos em Matemática da Computação II",
     "carga_horaria": "64h"
   },  
   {
@@ -201,7 +201,7 @@
   },  
   {
     "codigo": "114200385",
-    "nome": "Tópicos em Metodologia e Técnicas da Computação II (EAD)",
+    "nome": "Tópicos em Metodologia e Técnicas da Computação II",
     "carga_horaria": "64h"
   },   
   {
@@ -216,7 +216,7 @@
   },  
   {
     "codigo": "114200388",
-    "nome": "Tópicos em Sistemas de Computação II (EAD)",
+    "nome": "Tópicos em Sistemas de Computação II",
     "carga_horaria": "64h"
   },  
   {
@@ -231,7 +231,7 @@
   },   
   {
     "codigo": "114200393",
-    "nome": "Tópicos em Sistemas de Informação II (EAD)",
+    "nome": "Tópicos em Sistemas de Informação II",
     "carga_horaria": "64h"
   }, 
   {
@@ -251,7 +251,7 @@
   }, 
   {
     "codigo": "114200395",
-    "nome": "Tópicos em Teoria da Computação II (EAD)",
+    "nome": "Tópicos em Teoria da Computação II",
     "carga_horaria": "64h"
   }, 
   {
