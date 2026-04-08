@@ -1,186 +1,173 @@
-function mostrarCampoIES(select) {
-  const externaDiv = select.parentElement.parentElement.querySelector(".ies-externa");
-  if (select.value === "Externa") {
-    externaDiv.style.display = "block";
-  } else {
-    externaDiv.style.display = "none";
-    externaDiv.querySelector("input").value = "";
-  }
-}
-
-function atualizarDisciplina(select) {
-  const inputCodigo = select.parentElement.parentElement.querySelector(".codigo-aproveitar");
-  inputCodigo.value = select.value;
-}
-
-function addDisciplina() {
-  const container = document.getElementById("disciplinas");
-  const nova = container.firstElementChild.cloneNode(true);
-  nova.querySelectorAll("input").forEach(input => input.value = "");
-  nova.querySelectorAll("select").forEach(sel => sel.selectedIndex = 0);
-  nova.querySelector(".ies-externa").style.display = "none";
-  container.appendChild(nova);
-}
-
-async function carregarDisciplinasPorTipo(selectTipo) {
-  const tipo = selectTipo.value;
-  const container = selectTipo.parentElement.parentElement;
-  const selectDisciplina = container.querySelector(".disciplina-aproveitar");
-  selectDisciplina.innerHTML = '<option>Carregando...</option>';
-
-  if (!tipo) {
-    selectDisciplina.innerHTML = '<option>Selecione o tipo primeiro</option>';
-    return;
-  }
-
-  let url = '';
-  if (tipo === 'obrigatoria') {
-    url = 'disciplinas_obrigatorias.json';
-  } else if (tipo === 'optativa') {
-    url = 'disciplinas_optativas.json';
-  }
-
-  try {
-    const response = await fetch(url);
-    const disciplinas = await response.json();
-
-    selectDisciplina.innerHTML = '<option value="">Selecione</option>';
-    disciplinas.forEach(d => {
-      const option = document.createElement('option');
-      option.value = d.codigo;
-      option.textContent = `${d.codigo} - ${d.nome}`;
-      selectDisciplina.appendChild(option);
-    });
-  } catch (err) {
-    console.error('Erro ao carregar disciplinas:', err);
-    selectDisciplina.innerHTML = '<option>Erro ao carregar</option>';
-  }
-}
-
-async function gerarPDF() {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-
-  const disciplinas = document.querySelectorAll(".disciplina");
-  let y = 15;
-  const lineHeight = 5;
-  const pageHeight = 280;
-
-  doc.setFontSize(7);
-
-  disciplinas.forEach((d, i) => {
-    if (y + 35 > pageHeight) {
-      doc.addPage();
-      y = 15;
-    }
-
-    doc.setFont("helvetica", "bold");
-    doc.text(`Disciplina ${i + 1}:`, 10, y);
-    y += lineHeight;
-
-    doc.text("IES", 10, y);
-    doc.text("Disc. Cursada", 35, y);
-    doc.text("Cód.", 85, y);
-    doc.text("Nota", 100, y);
-    doc.text("C.H.", 115, y);
-    doc.text("Tipo", 130, y);
-    doc.text("Aproveitar como", 150, y);
-    doc.text("Cód.", 190, y);
-    doc.text("C.H.", 205, y);
-    y += lineHeight;
-
-    doc.setFont("helvetica", "normal");
-
-    const ies = d.querySelector(".ies-select").value;
-    const iesOutro = d.querySelector(".ies-outra").value;
-    const origem = ies === "Externa" ? iesOutro || "-" : "UFMT";
-
-    const cursada = d.querySelector(".disciplina-cursada").value || "-";
-    const codCursada = d.querySelector(".codigo-cursada").value || "-";
-    const nota = d.querySelector(".nota").value || "-";
-    const cargaCursada = d.querySelector(".carga-horaria-cursada").value || "-";
-
-    const tipo = d.querySelector(".tipo-disciplina")?.value || "-";
-
-    const selectAproveitar = d.querySelector("select.disciplina-aproveitar");
-    const codAproveitar = d.querySelector(".codigo-aproveitar").value || "-";
-    const aproveitadaNome = selectAproveitar.options[selectAproveitar.selectedIndex]?.text?.split(" - ")[1] || "-";
-
-    let cargaAproveitada = "-";
-    try {
-      if (tipo === 'obrigatoria') {
-        cargaAproveitada = disciplinasObrigatorias.find(dd => dd.codigo === codAproveitar)?.carga_horaria || "-";
-      } else if (tipo === 'optativa') {
-        cargaAproveitada = disciplinasOptativas.find(dd => dd.codigo === codAproveitar)?.carga_horaria || "-";
-      }
-    } catch {
-      cargaAproveitada = "-";
-    }
-
-    const xIES = 10, wIES = 20;
-    const xCursada = 35, wCursada = 45;
-    const xCodCursada = 85, wCodCursada = 15;
-    const xNota = 100, wNota = 10;
-    const xCargaCursada = 115, wCargaCursada = 10;
-    const xTipo = 130, wTipo = 15;
-    const xAproveitar = 150, wAproveitar = 40;
-    const xCodAproveitar = 190, wCodAproveitar = 15;
-    const xCargaAproveitar = 205, wCargaAproveitar = 10;
-
-    const lines = {
-      ies: doc.splitTextToSize(origem, wIES),
-      cursada: doc.splitTextToSize(cursada, wCursada),
-      codCursada: doc.splitTextToSize(codCursada, wCodCursada),
-      nota: doc.splitTextToSize(nota, wNota),
-      cargaCursada: doc.splitTextToSize(cargaCursada, wCargaCursada),
-      tipo: doc.splitTextToSize(tipo.charAt(0).toUpperCase() + tipo.slice(1), wTipo),
-      aproveitada: doc.splitTextToSize(aproveitadaNome, wAproveitar),
-      codAproveitar: doc.splitTextToSize(codAproveitar, wCodAproveitar),
-      cargaAproveitar: doc.splitTextToSize(cargaAproveitada, wCargaAproveitar),
-    };
-
-    const maxLines = Math.max(...Object.values(lines).map(arr => arr.length));
-
-    for (let i = 0; i < maxLines; i++) {
-      const yLine = y + i * lineHeight;
-      doc.text(lines.ies[i] || "", xIES, yLine);
-      doc.text(lines.cursada[i] || "", xCursada, yLine);
-      doc.text(lines.codCursada[i] || "", xCodCursada, yLine);
-      doc.text(lines.nota[i] || "", xNota + wNota, yLine, { align: "right" });
-      doc.text(lines.cargaCursada[i] || "", xCargaCursada, yLine);
-      doc.text(lines.tipo[i] || "", xTipo, yLine);
-      doc.text(lines.aproveitada[i] || "", xAproveitar, yLine);
-      doc.text(lines.codAproveitar[i] || "", xCodAproveitar, yLine);
-      doc.text(lines.cargaAproveitar[i] || "", xCargaAproveitar, yLine);
-    }
-
-    y += maxLines * lineHeight + 3;
-  });
-
-  doc.save("aproveitamento_estudos.pdf");
-}
-
-// Variáveis globais
 let disciplinasObrigatorias = [];
 let disciplinasOptativas = [];
 
-async function carregarJSONs() {
+async function carregarDados() {
   try {
-    const respObrig = await fetch('disciplinas_obrigatorias.json');
-    disciplinasObrigatorias = await respObrig.json();
+    const [resObrig, resOpt] = await Promise.all([
+      fetch('disciplinas_obrigatorias.json'),
+      fetch('disciplinas_optativas.json')
+    ]);
+    disciplinasObrigatorias = await resObrig.json();
+    disciplinasOptativas = await resOpt.json();
 
-    const respOpt = await fetch('disciplinas_optativas.json');
-    disciplinasOptativas = await respOpt.json();
+    const savedSEI = localStorage.getItem('sei_aproveitamento');
+    if (savedSEI) document.getElementById('processoSEI').value = savedSEI;
 
-    document.querySelectorAll('.tipo-disciplina').forEach(sel => {
-      sel.selectedIndex = 0;
-    });
-    document.querySelectorAll('.disciplina-aproveitar').forEach(sel => {
-      sel.innerHTML = '<option>Selecione o tipo primeiro</option>';
-    });
+    addDisciplina();
   } catch (e) {
-    console.error('Erro ao carregar JSONs:', e);
+    console.error("Erro ao carregar dados", e);
   }
 }
 
-window.addEventListener('DOMContentLoaded', carregarJSONs);
+function salvarProgresso() {
+  localStorage.setItem('sei_aproveitamento', document.getElementById('processoSEI').value);
+}
+
+function addDisciplina() {
+  const container = document.getElementById("disciplinas-container");
+  const id = Date.now();
+
+  const div = document.createElement("div");
+  div.className = "card disciplina-block";
+  div.id = `block-${id}`;
+
+  div.innerHTML = `
+        <div class="card-header">
+            <h4>Disciplina para Aproveitar</h4>
+            <button onclick="removerBloco('${id}')" class="btn-remove">Remover</button>
+        </div>
+        
+        <div class="grid-form">
+            <!-- Linha 1: Origem e Nome -->
+            <div class="group">
+                <label>IES de Origem</label>
+                <select onchange="toggleIES(this)">
+                    <option value="UFMT">UFMT</option>
+                    <option value="Externa">Instituição Externa</option>
+                </select>
+                <input type="text" class="ies-outra" placeholder="Nome da Instituição" style="display:none; margin-top:8px;">
+            </div>
+
+            <div class="group">
+                <label>Disciplina Cursada (Nome)</label>
+                <input type="text" class="cursada-nome" placeholder="Ex: Álgebra Linear">
+            </div>
+
+            <!-- Linha 2: Dados Técnicos -->
+            <div class="group">
+                <label>Código da Cursada</label>
+                <input type="text" class="cursada-cod" placeholder="Ex: MAT101">
+            </div>
+
+            <div class="group">
+                <div class="row-flex">
+                    <div style="flex:1">
+                        <label>Carga Horária</label>
+                        <input type="text" class="cursada-ch" placeholder="Ex: 60h">
+                    </div>
+                    <div style="flex:1">
+                        <label>Nota Final</label>
+                        <input type="text" class="cursada-nota" placeholder="Ex: 9.0">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Linha 3: Tipo e Equivalente -->
+            <div class="group">
+                <label>Tipo de Aproveitamento</label>
+                <select class="tipo-select" onchange="popularDisciplinas(this)">
+                    <option value="">Selecione...</option>
+                    <option value="obrigatoria">Obrigatória</option>
+                    <option value="optativa">Optativa</option>
+                </select>
+            </div>
+
+            <div class="group">
+                <label>Disciplina Equivalente na UFMT</label>
+                <select class="disciplina-ufmt">
+                    <option value="">Selecione o tipo primeiro</option>
+                </select>
+            </div>
+        </div>
+    `;
+  container.appendChild(div);
+}
+
+function toggleIES(select) {
+  const input = select.nextElementSibling;
+  input.style.display = select.value === "Externa" ? "block" : "none";
+}
+
+function popularDisciplinas(select) {
+  const container = select.closest('.disciplina-block');
+  const targetSelect = container.querySelector('.disciplina-ufmt');
+  const lista = select.value === 'obrigatoria' ? disciplinasObrigatorias : disciplinasOptativas;
+
+  targetSelect.innerHTML = '<option value="">Selecione a disciplina...</option>';
+  lista.forEach(d => {
+    const opt = document.createElement('option');
+    opt.value = d.codigo;
+    opt.textContent = `${d.codigo} - ${d.nome} (${d.carga_horaria})`;
+    targetSelect.appendChild(opt);
+  });
+}
+
+function removerBloco(id) {
+  const blocks = document.querySelectorAll('.disciplina-block');
+  if (blocks.length > 1) document.getElementById(`block-${id}`).remove();
+}
+
+function gerarPDF() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  const sei = document.getElementById('processoSEI').value || "Não informado";
+
+  let y = 20;
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(14);
+  doc.text("UNIVERSIDADE FEDERAL DE MATO GROSSO", 105, y, { align: "center" });
+  y += 8;
+  doc.setFontSize(11);
+  doc.text("REQUERIMENTO DE APROVEITAMENTO DE ESTUDOS", 105, y, { align: "center" });
+  y += 12;
+  doc.text(`PROCESSO SEI: ${sei}`, 15, y);
+  y += 5;
+  doc.line(15, y, 195, y);
+  y += 10;
+
+  document.querySelectorAll(".disciplina-block").forEach((bloco, index) => {
+    if (y > 250) { doc.addPage(); y = 20; }
+
+    const ies = bloco.querySelector('select').value;
+    const iesNome = ies === "UFMT" ? "UFMT" : bloco.querySelector('.ies-outra').value;
+    const cursada = bloco.querySelector('.cursada-nome').value;
+    const codCursada = bloco.querySelector('.cursada-cod').value;
+    const nota = bloco.querySelector('.cursada-nota').value;
+    const ch = bloco.querySelector('.cursada-ch').value;
+
+    const selectUfmt = bloco.querySelector('.disciplina-ufmt');
+    const nomeUfmt = selectUfmt.options[selectUfmt.selectedIndex]?.text || "-";
+
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "bold");
+    doc.text(`${index + 1}. ORIGEM: ${iesNome}`, 15, y);
+    y += 6;
+    doc.setFont("helvetica", "normal");
+    doc.text(`Cursada: ${cursada} (${codCursada}) | CH: ${ch} | Nota: ${nota}`, 20, y);
+    y += 5;
+    doc.setFont("helvetica", "bold");
+    doc.text(`Aproveitar como: ${nomeUfmt}`, 20, y);
+    y += 12;
+  });
+
+  doc.save(`Aproveitamento_SEI_${sei.replace(/\//g, '-')}.pdf`);
+}
+
+function limparFormulario() {
+  if(confirm("Deseja limpar todos os dados?")) {
+    localStorage.removeItem('sei_aproveitamento');
+    window.location.reload();
+  }
+}
+
+window.onload = carregarDados;

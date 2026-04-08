@@ -1,65 +1,50 @@
 <!DOCTYPE html>
-
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Aproveitamento de Estudos</title>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <title>UFMT | Aproveitamento de Estudos</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <h2>Solicitação de Aproveitamento de Estudos</h2>
 
-  <div id="disciplinas">
-    <div class="disciplina">
-      <label>IES de origem:
-        <select class="ies-select" onchange="mostrarCampoIES(this)">
-          <option value="UFMT">UFMT</option>
-          <option value="Externa">Externa</option>
-        </select>
-      </label>
-      <label class="ies-externa" style="display:none;">
-        Qual instituição?
-        <input type="text" class="ies-outra" placeholder="Nome da instituição" />
-      </label>
-
-      <label>Disciplina cursada:
-        <input type="text" class="disciplina-cursada" placeholder="Ex: Álgebra Linear" />
-      </label>
-      <label>Código da cursada:
-        <input type="text" class="codigo-cursada" placeholder="Ex: MAT123" />
-      </label>
-      <label>Carga Horária cursada:
-        <input type="text" class="carga-horaria-cursada" placeholder="Ex: 60h" />
-      </label>
-      <label>Nota:
-        <input type="text" class="nota" placeholder="Ex: 8.5" />
-      </label>
-
-      <label>Tipo de disciplina a aproveitar:
-        <select class="tipo-disciplina" onchange="carregarDisciplinasPorTipo(this)">
-          <option value="">Selecione</option>
-          <option value="obrigatoria">Obrigatória</option>
-          <option value="optativa">Optativa</option>
-        </select>
-      </label>
-
-      <label>Disciplina a aproveitar:
-        <select class="disciplina-aproveitar" onchange="atualizarDisciplina(this)">
-          <option value="">Selecione o tipo primeiro</option>
-        </select>
-      </label>
-      <label>Código disciplina a aproveitar:
-        <input type="text" readonly class="codigo-aproveitar" />
-      </label>
+<header class="main-header">
+  <div class="header-container">
+    <div class="brand">
+      <h1>UFMT</h1>
+      <span>Aproveitamento de Estudos</span>
+    </div>
+    <div class="actions">
+      <button onclick="gerarPDF()" class="btn-pdf">📄 Gerar Requerimento (PDF)</button>
     </div>
   </div>
+</header>
 
-  <button onclick="addDisciplina()">Adicionar outra disciplina</button>
-  <button onclick="gerarPDF()">Gerar PDF</button>
+<main class="container">
+  <!-- Identificação do Processo -->
+  <section class="card info-sei">
+    <h3>Identificação do Processo</h3>
+    <div class="grid-inputs">
+      <div class="field">
+        <label>Número do Processo SEI</label>
+        <input type="text" id="processoSEI" placeholder="23108.XXXXXX/XXXX-XX" oninput="salvarProgresso()">
+      </div>
+    </div>
+  </section>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="script.js"></script>
+  <!-- Lista de Disciplinas -->
+  <div id="disciplinas-container">
+    <!-- O JS injetará o primeiro card aqui -->
+  </div>
+
+  <div class="form-footer">
+    <button onclick="addDisciplina()" class="btn-add">+ Adicionar Outra Disciplina</button>
+    <button onclick="limparFormulario()" class="btn-reset">Limpar Tudo</button>
+  </div>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="script.js"></script>
 </body>
 </html>

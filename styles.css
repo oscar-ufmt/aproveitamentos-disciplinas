@@ -1,74 +1,108 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --primary: #003d79;
+  --accent: #fbbf24;
+  --bg: #f1f5f9;
+  --text: #1e293b;
+  --border: #cbd5e1;
+}
+
+* { box-sizing: border-box; }
 body {
-  font-family: Arial, sans-serif;
-  padding: 14px;
-  background: #f4f4f4;
+  font-family: 'Inter', sans-serif;
+  background-color: var(--bg);
+  margin: 0;
+  color: var(--text);
+  padding-bottom: 50px;
 }
 
-.disciplina {
-  background: #fff;
-  padding: 15px;
-  margin-bottom: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+.main-header {
+  background: var(--primary);
+  color: white;
+  padding: 1.2rem 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
 }
 
-/* Responsividade básica para inputs e selects */
-label {
-  display: block;
-  margin-top: 10px;
+.header-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-input,
-select {
+.brand h1 { margin: 0; font-size: 1.3rem; }
+
+.container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
+
+/* Card Principal: GARANTE QUE TUDO FIQUE DENTRO DO BRANCO */
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  display: block; /* Garante comportamento de bloco */
   width: 100%;
-  padding: 6px;
-  margin-top: 4px;
-  box-sizing: border-box;
 }
 
-/* Botão */
-button {
-  padding: 8px 14px;
-  font-size: 14px;
-  margin-top: 10px;
-  cursor: pointer;
+.card h3 { margin-top: 0; color: var(--primary); font-size: 1.1rem; }
+
+/* Grid de Formulário */
+.grid-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 1rem;
 }
 
-/* Campo de IES externa inicialmente escondido */
-.ies-externa {
-  display: none;
+.group { display: flex; flex-direction: column; width: 100%; }
+
+label { font-size: 0.8rem; font-weight: 700; color: #64748b; margin-bottom: 0.5rem; text-transform: uppercase; }
+
+input, select {
+  padding: 0.8rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.95rem;
+  width: 100%;
+  transition: border-color 0.2s;
 }
 
-/* MEDIA QUERIES PARA RESPONSIVIDADE */
-@media (min-width: 768px) {
-  .disciplina {
-    max-width: 600px;
-    margin: 0 auto 20px auto; /* Centraliza no desktop/tablet */
-  }
+input:focus, select:focus { outline: none; border-color: var(--primary); }
 
-  input,
-  select {
-    font-size: 16px;
-  }
+.row-flex { display: flex; gap: 15px; }
 
-  button {
-    font-size: 16px;
-  }
+/* Cabeçalho do Card */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #f1f5f9;
+  padding-bottom: 1rem;
+  margin-bottom: 1rem;
 }
+.card-header h4 { margin: 0; color: var(--primary); }
 
-@media (max-width: 480px) {
-  body {
-    padding: 10px;
-  }
+/* Botões */
+button { cursor: pointer; font-weight: 600; border: none; border-radius: 8px; transition: 0.2s; }
 
-  .disciplina {
-    padding: 10px;
-  }
+.btn-pdf { background: var(--accent); padding: 10px 20px; }
+.btn-add { background: var(--primary); color: white; padding: 1.2rem; width: 100%; margin-top: 1rem; font-size: 1rem; }
+.btn-remove { background: #fee2e2; color: #dc2626; padding: 6px 12px; font-size: 0.8rem; }
+.btn-reset { background: transparent; color: #94a3b8; padding: 1rem; text-decoration: underline; }
 
-  label,
-  input,
-  select,
-  button {
-    font-size: 14px;
-  }
+/* Mobile */
+@media (max-width: 768px) {
+  .grid-form { grid-template-columns: 1fr; }
+  .header-container { flex-direction: column; text-align: center; gap: 10px; }
 }
